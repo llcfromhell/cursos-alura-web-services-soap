@@ -1,4 +1,4 @@
-package br.com.caelum.estoquews;
+package br.com.caelum.estoque;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

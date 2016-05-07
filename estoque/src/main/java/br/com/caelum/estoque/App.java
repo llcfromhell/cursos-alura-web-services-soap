@@ -1,4 +1,4 @@
-package br.com.caelum.estoquews;
+package br.com.caelum.estoque;
 
 /**
  * Hello world!
