@@ -35,8 +35,6 @@ public class ItemValidador {
 		}
 		
 		if(!erros.isEmpty()){
-//			throw new RuntimeException("argg"); 
-
 			throw new ItemValidadorException(erros); 
 		}
 	}
