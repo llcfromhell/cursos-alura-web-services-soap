@@ -2,6 +2,7 @@ package br.com.caelum.estoque.ws;
 
 import java.util.List;
 
+import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -50,6 +51,12 @@ public class EstoqueWS {
 	    this.dao.cadastrar(item);
 	    
 	    return item;
+	}
+	
+	@Oneway
+	@WebMethod(operationName="OnewayServiceTest")
+	public void onewayServiceTest() {
+		System.out.println("oneway called");
 	}
 
 }

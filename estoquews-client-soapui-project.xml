@@ -15,7 +15,7 @@
   </message>
   <message name="CadastrarItem">
     <part name="parameters" element="tns:CadastrarItem"/>
-    <part name="token" element="tns:token"/>
+    <part name="tokenUsuario" element="tns:tokenUsuario"/>
   </message>
   <message name="CadastrarItemResponse">
     <part name="result" element="tns:CadastrarItemResponse"/>
@@ -28,7 +28,7 @@
       <input wsam:Action="http://ws.estoque.caelum.com.br/EstoqueWS/todosOsItensRequest" message="tns:todosOsItens"/>
       <output wsam:Action="http://ws.estoque.caelum.com.br/EstoqueWS/todosOsItensResponse" message="tns:todosOsItensResponse"/>
     </operation>
-    <operation name="CadastrarItem" parameterOrder="parameters token">
+    <operation name="CadastrarItem" parameterOrder="parameters tokenUsuario">
       <input wsam:Action="http://ws.estoque.caelum.com.br/EstoqueWS/CadastrarItemRequest" message="tns:CadastrarItem"/>
       <output wsam:Action="http://ws.estoque.caelum.com.br/EstoqueWS/CadastrarItemResponse" message="tns:CadastrarItemResponse"/>
       <fault message="tns:AutorizacaoFault" name="AutorizacaoFault" wsam:Action="http://ws.estoque.caelum.com.br/EstoqueWS/CadastrarItem/Fault/AutorizacaoException"/>
@@ -49,7 +49,7 @@
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal" parts="parameters"/>
-        <soap:header message="tns:CadastrarItem" part="token" use="literal"/>
+        <soap:header message="tns:CadastrarItem" part="tokenUsuario" use="literal"/>
       </input>
       <output>
         <soap:body use="literal"/>
@@ -66,14 +66,13 @@
   </service>
 </definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://localhost:9090/estoquews?xsd=1</con:url><con:content><![CDATA[<!--Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.9-b130926.1035 svn-revision#5f6196f2b90e9460065a4c2f4e30e065b245e51e.-->
 <xs:schema version="1.0" targetNamespace="http://ws.estoque.caelum.com.br/" xmlns:tns="http://ws.estoque.caelum.com.br/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="AutorizacaoFault" type="tns:AutorizacaoException"/>
+  <xs:element name="AutorizacaoFault" nillable="true" type="tns:infoFault"/>
   <xs:element name="CadastrarItem" type="tns:CadastrarItem"/>
   <xs:element name="CadastrarItemResponse" type="tns:CadastrarItemResponse"/>
   <xs:element name="filtros" type="tns:filtros"/>
-  <xs:element name="item" type="tns:item"/>
   <xs:element name="itens" type="tns:itens"/>
   <xs:element name="listaItens" type="tns:listaItens"/>
-  <xs:element name="token" nillable="true" type="tns:tokenUsuario"/>
+  <xs:element name="tokenUsuario" nillable="true" type="tns:tokenUsuario"/>
   <xs:complexType name="CadastrarItem">
     <xs:sequence>
       <xs:element name="item" type="tns:item" minOccurs="0"/>
@@ -81,16 +80,16 @@
   </xs:complexType>
   <xs:complexType name="item">
     <xs:sequence>
-      <xs:element name="codigo" type="xs:string" minOccurs="0"/>
-      <xs:element name="nome" type="xs:string" minOccurs="0"/>
+      <xs:element name="codigo" type="xs:string"/>
+      <xs:element name="nome" type="xs:string"/>
+      <xs:element name="tipo" type="xs:string"/>
       <xs:element name="quantidade" type="xs:int"/>
-      <xs:element name="tipo" type="xs:string" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="tokenUsuario">
     <xs:sequence>
-      <xs:element name="dataValidade" type="xs:dateTime" minOccurs="0"/>
-      <xs:element name="token" type="xs:string" minOccurs="0"/>
+      <xs:element name="token" type="xs:string"/>
+      <xs:element name="dataValidade" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="CadastrarItemResponse">
@@ -98,9 +97,10 @@
       <xs:element name="return" type="tns:item" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="AutorizacaoException">
+  <xs:complexType name="infoFault">
     <xs:sequence>
-      <xs:element name="message" type="xs:string" minOccurs="0"/>
+      <xs:element name="dataErro" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="mensagem" type="xs:string" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="listaItens">
@@ -135,16 +135,72 @@
    <soapenv:Header/>
    <soapenv:Body>
       <ws:listaItens>
-         </ws:listaItens>
+         <!--Optional:-->
+         <filtros>
+            <!--Zero or more repetitions:-->
+            <filtro>
+               <!--Optional:-->
+               <nome>Moto</nome>
+               <!--Optional:-->
+               <tipo>Celular</tipo>
+            </filtro>
+         </filtros>
+      </ws:listaItens>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.estoque.caelum.com.br/EstoqueWS/todosOsItensRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="CadastrarItem" bindingOperationName="CadastrarItem" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:9090/estoquews</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.estoque.caelum.com.br/">
    <soapenv:Header>
-      <ws:token>
-      	
-         </ws:token>
+      <ws:tokenUsuario soapenv:mustUnderstand="1">
+         <token>AAA</token>
+         <dataValidade>2015-12-31T00:00:00</dataValidade>
+      </ws:tokenUsuario>
+   </soapenv:Header>
+   <soapenv:Body>
+      
+      <ws:CadastrarItem>
+         <!--Optional:-->
+         <item>
+            <codigo>M12</codigo>
+            <nome>MEAN</nome>
+            <tipo>Livro</tipo>
+            <quantidade>5</quantidade>
+         </item>
+      </ws:CadastrarItem>
+      
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.estoque.caelum.com.br/EstoqueWS/CadastrarItemRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Request 2"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:9090/estoquews</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.estoque.caelum.com.br/">
+   <soapenv:Header>
+      <ws:tokenUsuario>
+         <token>?</token>
+         <dataValidade>?</dataValidade>
+      </ws:tokenUsuario>
    </soapenv:Header>
    <soapenv:Body>
       <ws:CadastrarItem>
-         </ws:CadastrarItem>
+         <!--Optional:-->
+         <item>
+            <codigo>?</codigo>
+            <nome>?</nome>
+            <tipo>?</tipo>
+            <quantidade>?</quantidade>
+         </item>
+      </ws:CadastrarItem>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.estoque.caelum.com.br/EstoqueWS/CadastrarItemRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Request 3"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:9090/estoquews</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://ws.estoque.caelum.com.br/">
+   <soapenv:Header>
+      <ws:tokenUsuario>
+         <token>?</token>
+         <dataValidade>?</dataValidade>
+      </ws:tokenUsuario>
+   </soapenv:Header>
+   <soapenv:Body>
+      <ws:CadastrarItem>
+         <!--Optional:-->
+         <item>
+            <codigo>?</codigo>
+            <nome>?</nome>
+            <tipo>?</tipo>
+            <quantidade>?</quantidade>
+         </item>
+      </ws:CadastrarItem>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.estoque.caelum.com.br/EstoqueWS/CadastrarItemRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
