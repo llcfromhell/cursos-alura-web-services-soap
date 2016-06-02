@@ -22,6 +22,26 @@ public class InfoFault {
 	public InfoFault() {
 		super();
 	}
+
+
+	public Date getDataErro() {
+		return dataErro;
+	}
+
+
+	public void setDataErro(Date dataErro) {
+		this.dataErro = dataErro;
+	}
+
+
+	public String getMensagem() {
+		return mensagem;
+	}
+
+
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
+	}
 	
 	
 	
