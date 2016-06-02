@@ -7,6 +7,10 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
+import javax.jws.soap.SOAPBinding.ParameterStyle;
+import javax.jws.soap.SOAPBinding.Style;
+import javax.jws.soap.SOAPBinding.Use;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
@@ -35,7 +39,8 @@ public class EstoqueWS {
     }
 	
 	
-	@WebMethod(operationName="CadastrarItem") 
+	@WebMethod(action="CadastrarItem", operationName="CadastrarItem")
+	@SOAPBinding(style=Style.DOCUMENT, use=Use.LITERAL, parameterStyle=ParameterStyle.BARE)
 	public Item cadastrarItem(
 			@WebParam(name="tokenUsuario", header=true) TokenUsuario token,
 			@WebParam(name="item") Item item) throws AutorizacaoException {
