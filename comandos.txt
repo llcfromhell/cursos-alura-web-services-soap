@@ -7,3 +7,7 @@ wsgen -wsdl -inlineSchemas -cp bin br.com.caelum.estoque.ws.EstoqueWS
 -- gerar webservice a partir de wsdl com jboss wildfly, implementação CXF
 
 sh wsconsume.sh -k -n -o /Users/nico/workspace/estoque-web/src /Users/nico/workspace/estoque-web/src/EstoqueWSServiceCap5.wsdl
+
+--
+-- gerar cliente de webservice
+wsimport -s src -p br.com.caelum.estoque.cliente    http://localhost:8080/estoque/EstoqueWS?wsdl
